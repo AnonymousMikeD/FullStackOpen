@@ -1,21 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
 
 const Header = (props) => {
-  return (
-    <div>
-      <h1>{props.course}</h1>
-    </div>
-  )
+  console.log(props)
+  return <h1>{props.course}</h1>
 }
 
 const Content = (props) => {
   return (
     <div>
       <p>
-        {props.part} {props.exercise}
-        {props.part1} {props.exercise1}
-        {props.part2} {props.exercise2}
+        {props[0].name} {props[0].exercises}
+        {props[1].name} {props[1].exercises}
+        {props[2].name} {props[2].exercises}
       </p>
     </div>
   )
@@ -24,30 +19,36 @@ const Content = (props) => {
 const Total = (props) => {
   return (
     <div>
-      <p>Number of exercises {props.exercises1 + props.exercoses2 + props.exercises3}</p>
+      <p>Number of exercises {props[0].exercises+ props[1].exercises+ props[2].exercises}</p>
     </div>
   )
 }
 
 const App = () => {
 
-  const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exervises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+  const course = {
+    name: 'Half Stack application development'
+    , parts: [{
+      name: 'Fundamentals of React',
+      exercises: 10
+    }
+      , {
+      name: 'Using props to pass data',
+      exercises: 7
+    }
+      , {
+      name: 'State of a component',
+      exercises: 14
+    }]
+  }
 
 
   return (
     <div>
-      <Header course={course} />
-      <Content part={part1} exercise={exercise1}
-        part1={part2} exercise1={exercise2}
-        part2={part3} exercise2={exercise3} />
-      <Total exercise1={exervises1} exercise2={exercises2} exercise3={exercises3} />
-    </div>
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
+    </div >
   )
 }
 
