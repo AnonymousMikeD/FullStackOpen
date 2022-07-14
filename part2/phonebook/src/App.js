@@ -4,16 +4,15 @@ import searchFor from './components/searchFor'
 import PersonForm from './components/PersonForm'
 import axios from 'axios';
 import listings from './services/listings';
-
-
-
-
+import './index.css'
+import Notifications from './components/Notifications';
 
 const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNum, setNewNum] = useState('')
-  const [newSearch, setSearch] = useState('')
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newNum, setNewNum] = useState('');
+  const [newSearch, setSearch] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     listings.getAll()
@@ -32,9 +31,10 @@ const App = () => {
         setPersons(persons.filter(n => n.id !== id))
         setSearch('');
       }).catch(error => {
-        alert(
+        setErrorMessage(
           `the person named '${FilteredPerson.name}' was already deleted from server`
         )
+        setTimeout(()=> setErrorMessage(null), 5000)
         setPersons(persons.filter(n => n.id !== id))
       })
     }
@@ -57,6 +57,12 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNum('')
+        }).catch(error => {
+          setErrorMessage(
+            `the person named '${NameId.name}' was already deleted from server`
+          )
+          setTimeout(()=> setErrorMessage(null), 5000)
+          setPersons(persons.filter(n => n.id !== NameId.id))
         })
     }}
 
@@ -66,6 +72,9 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setErrorMessage(
+            `Added ${personObject.name}`
+          )
           setNewName('')
           setNewNum('')
         })
@@ -89,6 +98,7 @@ const App = () => {
 
     <div>
       <h2>Phonebook</h2>
+        <Notifications message={errorMessage}/>
       <div>filter shown with <input type={"text"} onChange={handleSearchChange} /></div>
       <h3>add a new</h3>
 
