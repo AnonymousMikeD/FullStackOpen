@@ -4,6 +4,10 @@ const { response } = require('express')
 const app = express()
 app.use(express.json())
 
+const cors = require('cors')
+
+app.use(cors())
+
 let notes = [
     {
         id:1,
@@ -34,6 +38,8 @@ app.get('/api/notes', (request, response) => {
     response.json(notes);
 })
 
+
+
 app.get('/api/notes/:id',(request, response) => {
     const id = Number(request.params.id)
     const note = notes.find(note=>note.id===id)
@@ -59,7 +65,6 @@ const generateId = () => {
     return maxId+1
 }
 
-
 app.post('/api/notes', (request, response) => {
     const body = request.body
 
@@ -70,7 +75,7 @@ app.post('/api/notes', (request, response) => {
     }
 
     const note = {
-        content: nody.content,
+        content: body.content,
         important: body.important || false,
         date: new Date(),
         id: generateId(),
@@ -83,6 +88,6 @@ app.post('/api/notes', (request, response) => {
     response.json(note)
 })
 
-const PORT = 3001
+const PORT = process.env || 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
